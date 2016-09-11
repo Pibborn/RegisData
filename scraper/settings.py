@@ -1,9 +1,10 @@
 import logging
 import os
+from .secrets import Secrets
 
 class Constants:
     FB_APP_PUBLIC_ID = "1774319916115816"
-    FB_APP_SECRET_ID = "nicetry"
+    FB_APP_SECRET_ID = Secrets.FB_APP_SECRET_ID
     FILE_ID = "prova"
     LOGGING_LEVEL = logging.INFO
     MY_DIR = os.path.expanduser('./')
