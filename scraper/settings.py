@@ -12,3 +12,4 @@ class Constants:
     APPLICATION_NAME = 'Google Sheets API Python Quickstart'
     # Both are needed: the first one to create a spreadsheet, the second one to write values in it
     SCOPES = ['https://www.googleapis.com/auth/spreadsheets', 'https://spreadsheets.google.com/feeds']
+    GSHEETS_UPDATE_BATCH_SIZE = 5000

@@ -5,17 +5,19 @@ from scraper.to_gsheets import *
 
 
 def main(args):
+    ## example gsheet updating
+
     creds = get_credentials()
-    #create_spreadsheet(creds, 'Attempt2')
 
     worksheet = get_worksheet(creds, 'Attempt', 1)
-    hello_worksheet(worksheet)
+    csv_to_gsheet(worksheet, "foobar")
 
-    #create_spreadsheet(creds)
+
+    ## example scraping
     #firstscraper = Scraper(facebook_scraping)
 
     #logging.info("Calling firstScraper.scrape()")
-    #firstscraper.scrape("coolieband")
+    #firstscraper.scrape("LIntraprendente")
 
 
 main(sys.argv)
