@@ -9,7 +9,8 @@ def main(args):
 
     creds = get_credentials()
 
-    worksheet = get_worksheet(creds, 'Attempt', 1)
+    #spreadsheet = create_spreadsheet(creds, 'Attempt-18nov')
+    worksheet = get_worksheet(creds, 'Attempt-18nov', 1)
     csv_to_gsheet(worksheet, "foobar")
 
 
@@ -17,7 +18,7 @@ def main(args):
     #firstscraper = Scraper(facebook_scraping)
 
     #logging.info("Calling firstScraper.scrape()")
-    #firstscraper.scrape("LIntraprendente")
+    #firstscraper.scrape("salviniofficial")
 
 
 main(sys.argv)

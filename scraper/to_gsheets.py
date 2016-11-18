@@ -49,6 +49,50 @@ def get_worksheet(creds, name, number):
 def hello_worksheet(wk):
     wk.update_acell('A2', 'Hi!')
 
+def prepare_comment_row(wk, cell_row, status_csv_line, comment_csv_line):
+    # we always start from the first column
+    cell_column = 1
+    # prepare an empty cell row list
+    cell_row_list = []
+
+    status_string = status_csv_line[1]
+    comment_status_id = comment_csv_line[1]
+
+    # first cell on each row is the status identifier
+    status_id_cell = wk.cell(cell_row, cell_column)
+    status_id_cell.value = comment_csv_line[1]
+    cell_row_list.append(status_id_cell)
+    cell_column += 1
+
+    # then what is written on the status the comment was written under
+    status_string_cell = wk.cell(cell_row, cell_column)
+    status_string_cell.value = status_string
+    cell_row_list.append(status_string_cell)
+    cell_column += 1
+
+    # then the actual comment string
+    comment_cell = wk.cell(cell_row, cell_column)
+    comment_cell.value = comment_csv_line[3]
+    cell_row_list.append(comment_cell)
+    cell_column += 1
+
+    # some time information
+    time_tokens = comment_csv_line[5].split(" ")
+    comment_date = time_tokens[0]
+    comment_hour = time_tokens[1]
+    date_cell = wk.cell(cell_row, cell_column)
+    date_cell.value = comment_date
+    cell_row_list.append(date_cell)
+    cell_column += 1
+
+    hour_cell = wk.cell(cell_row, cell_column)
+    hour_cell.value = comment_hour
+    cell_row_list.append(hour_cell)
+    cell_column += 1
+
+    return cell_row_list
+
+
 def csv_to_gsheet(wk, csv_file):
     # TODO: set up settings.py so that this is automatically understood
     status_csv = open(Constants.MY_DIR + 'LIntraprendente_facebook_statuses.csv', 'r')
@@ -71,39 +115,19 @@ def csv_to_gsheet(wk, csv_file):
         status_string = status_csv_line[1]
 
         comment_status_id = comment_csv_line[1]
+
+        # we should not move on from this loop until
+        # we processed each comment that is relative to the
+        # status that has status_id as an identifier
         while comment_status_id == status_id:
-            cell_column = 1
+            cell_row_list = prepare_comment_row(wk, cell_row, status_csv_line, comment_csv_line)
 
-            status_cell = wk.cell(cell_row, cell_column)
-            status_cell.value = comment_csv_line[1]
-            cell_row_list.append(status_cell)
-            cell_column += 1
-
-            comment_cell = wk.cell(cell_row, cell_column)
-            comment_cell.value = comment_csv_line[3]
-            cell_row_list.append(comment_cell)
-            cell_column += 1
-
-            time_tokens = comment_csv_line[5].split(" ")
-            comment_date = time_tokens[0]
-            comment_hour = time_tokens[1]
-            date_cell = wk.cell(cell_row, cell_column)
-            date_cell.value = comment_date
-            cell_row_list.append(date_cell)
-            cell_column += 1
-
-            hour_cell = wk.cell(cell_row, cell_column)
-            hour_cell.value = comment_hour
-            cell_row_list.append(hour_cell)
-            cell_column += 1
-
-            # TODO: some way to setup batch size. Can be as simple as an if statement right here
-            # i += 1
-            # if i == Constants.GSHEETS_UPDATE_BATCH_SIZE:
             wk.update_cells(cell_row_list)
-            cell_row_list = []
 
+            # set up loop for next iteration
+            cell_row_list = []
             cell_row += 1
+
             comment_csv_line = next(comment_csv_reader)
             comment_status_id = comment_csv_line[1]
 
